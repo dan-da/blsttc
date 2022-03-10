@@ -128,6 +128,14 @@ impl std::cmp::PartialEq<G1Affine> for PublicKey {
     }
 }
 
+impl std::ops::Add for PublicKey {
+    type Output = Self;
+
+    fn add(self, other: Self) -> Self {
+        Self::from(self.0 + other.0)
+    }
+}
+
 impl PublicKey {
     /// Returns `true` if the signature matches the element of `G2`.
     pub fn verify_g2<H: Into<G2Affine>>(&self, sig: &Signature, hash: H) -> bool {
@@ -259,6 +267,14 @@ impl fmt::Debug for Signature {
 impl Hash for Signature {
     fn hash<H: Hasher>(&self, state: &mut H) {
         self.0.to_affine().to_compressed().as_ref().hash(state);
+    }
+}
+
+impl std::ops::Add for Signature {
+    type Output = Self;
+
+    fn add(self, other: Self) -> Self {
+        Self(self.0 + other.0)
     }
 }
 
